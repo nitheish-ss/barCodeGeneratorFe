@@ -1,0 +1,59 @@
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
+import SignInForm from "../components/SignInForm";
+import { Formik, Form } from "formik";
+import { user_login_initial_values } from "../contsants/Variables";
+import { user_login_schema } from "../contsants/Schemas";
+import { login } from "../services/auth";
+import { getCurrentUser } from "../services/user";
+import { Navigate } from "react-router-dom";
+
+const SignIn = () => {
+
+
+	const handleFormSubmit = async (e, values) => {
+		e.preventDefault();
+		let body = {
+			email: values.email,
+			password: values.password,
+		};
+
+		try {
+			let { status, data } = await login(body);
+
+			if (status === 200) {
+				window.location = "/";
+			} else {
+				alert(data.message);
+			}
+		} catch (err) {
+			alert(err);
+		}
+	};
+
+	if (getCurrentUser()) return <Navigate to="/" />;
+
+	return (
+		<div className="body_wrapper">
+			<Formik
+				initialValues={user_login_initial_values}
+				enableReinitialize={true}
+				validationSchema={user_login_schema}
+				validateOnMount
+				onSubmit={(values, actions) => {
+					setTimeout(() => {
+						alert(JSON.stringify(values, null, 2));
+						actions.setSubmitting(false);
+					}, 1000);
+				}}
+			>
+				{(formikProps) => (
+					<Form onSubmit={(e) => handleFormSubmit(e, formikProps.values)}>
+						<SignInForm />
+					</Form>
+				)}
+			</Formik>
+		</div>
+	);
+};
+export default SignIn;
