@@ -6,9 +6,10 @@ const Input = (props) => {
     props;
 
   return (
-    <div className="form-group text_box">
-      <label className="f_p text_c f_400">{label}</label>
+    <div className="form-group">
+      <label>{label}</label>
       <input
+        className="form-control"
         name={name}
         type={type}
         placeholder={placeholder}

@@ -9,51 +9,53 @@ import { getCurrentUser } from "../services/user";
 import { Navigate } from "react-router-dom";
 
 const SignIn = () => {
+  const handleFormSubmit = async (e, values) => {
+    e.preventDefault();
+    let body = {
+      email: values.email,
+      password: values.password,
+    };
 
+    try {
+      let { status, data } = await login(body);
 
-	const handleFormSubmit = async (e, values) => {
-		e.preventDefault();
-		let body = {
-			email: values.email,
-			password: values.password,
-		};
+      if (status === 200) {
+        window.location = "/";
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert(err);
+    }
+  };
 
-		try {
-			let { status, data } = await login(body);
+  if (getCurrentUser()) return <Navigate to="/" />;
 
-			if (status === 200) {
-				window.location = "/";
-			} else {
-				alert(data.message);
-			}
-		} catch (err) {
-			alert(err);
-		}
-	};
-
-	if (getCurrentUser()) return <Navigate to="/" />;
-
-	return (
-		<div className="body_wrapper">
-			<Formik
-				initialValues={user_login_initial_values}
-				enableReinitialize={true}
-				validationSchema={user_login_schema}
-				validateOnMount
-				onSubmit={(values, actions) => {
-					setTimeout(() => {
-						alert(JSON.stringify(values, null, 2));
-						actions.setSubmitting(false);
-					}, 1000);
-				}}
-			>
-				{(formikProps) => (
-					<Form onSubmit={(e) => handleFormSubmit(e, formikProps.values)}>
-						<SignInForm />
-					</Form>
-				)}
-			</Formik>
-		</div>
-	);
+  return (
+    <div className="container-fluid">
+      <div className="row min-vh-100 align-items-center">
+        <div className="col-md-6 offset-md-3">
+          <Formik
+            initialValues={user_login_initial_values}
+            enableReinitialize={true}
+            validationSchema={user_login_schema}
+            validateOnMount
+            onSubmit={(values, actions) => {
+              setTimeout(() => {
+                alert(JSON.stringify(values, null, 2));
+                actions.setSubmitting(false);
+              }, 1000);
+            }}
+          >
+            {(formikProps) => (
+              <Form onSubmit={(e) => handleFormSubmit(e, formikProps.values)}>
+                <SignInForm />
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    </div>
+  );
 };
 export default SignIn;
