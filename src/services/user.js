@@ -7,7 +7,9 @@ const apiEndpoint = "users";
 http.setJwt(getJwt());
 
 export function getMe() {
-  return http.get(`${apiEndpoint}/me`);
+  return http.get(`${apiEndpoint}/me`,{headers:{
+    "cache-control": "no-cache" 
+  }});
 }
 
 export function getCurrentUser() {

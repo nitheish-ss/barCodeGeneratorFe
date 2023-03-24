@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserContext } from "./contexts/userContext";
 import MainRoutes from "./routes/mainRoutes";
 import { getMe } from "./services/user";
+import CustomNavbar from "./components/Navbar";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -14,7 +15,10 @@ const App = () => {
   return (
     <>
       <UserContext.Provider value={user}>
-        <MainRoutes />
+        <div className="container-fluid">
+          <CustomNavbar />
+          <MainRoutes />
+        </div>
       </UserContext.Provider>
     </>
   );
