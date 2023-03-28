@@ -3,6 +3,7 @@ import { UserContext } from "./contexts/userContext";
 import MainRoutes from "./routes/mainRoutes";
 import { getMe } from "./services/user";
 import CustomNavbar from "./components/Navbar";
+import { toast, ToastContainer } from "react-toastify";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -19,6 +20,7 @@ const App = () => {
           <CustomNavbar />
           <MainRoutes />
         </div>
+        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       </UserContext.Provider>
     </>
   );

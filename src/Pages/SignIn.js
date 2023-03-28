@@ -7,6 +7,7 @@ import { user_login_schema } from "../contsants/Schemas";
 import { login } from "../services/auth";
 import { getCurrentUser } from "../services/user";
 import { Navigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignIn = () => {
   const handleFormSubmit = async (e, values) => {
@@ -18,14 +19,14 @@ const SignIn = () => {
 
     try {
       let { status, data } = await login(body);
-
       if (status === 200) {
         window.location = "/home";
+        toast.success("User Verified Successfully");
       } else {
-        alert(data.message);
+        toast.error("Authentication failed");
       }
     } catch (err) {
-      alert(err);
+      toast.error(err.response.data.message);
     }
   };
 
