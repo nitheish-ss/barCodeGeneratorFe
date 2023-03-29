@@ -1,101 +1,137 @@
-import React, { useEffect, useState } from "react";
 import { getDevices } from "../services/deviceService";
-import Table from "react-bootstrap/Table";
-import { FaEye, FaPen, FaTrash } from "react-icons/fa";
+import { FaPen, FaTrash } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import Paper from "@mui/material/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
 
 const DeviceTable = () => {
   const [devices, setDevices] = useState(null);
-  const [pageNo, setPageNo] = useState(1);
-  const [perPage, setPerpage] = useState(15);
+  const [pageNo, setPageNo] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+  const [count, setCount] = useState(0);
   useEffect(() => {
     getDevicesData();
-  }, []);
+  }, [pageNo, perPage]);
   const getDevicesData = async () => {
     const result = await getDevices(pageNo, perPage);
+    setCount(result?.count);
     setDevices(result?.data);
   };
+
+  const handleChangePage = (event, newPage) => {
+    setPageNo(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPerPage(+event.target.value);
+    setPageNo(0);
+  };
+
   console.log(devices);
   return (
-    <div className="table-responsive-xl">
-      <Table className="table" striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Imei</th>
-            <th>RAM</th>
-            <th>ROM (Internal Storage)</th>
-            <th>Device Condition</th>
-            <th>Purchased From</th>
-            <th>Purchased From Contact No.</th>
-            <th>Purchase Cost</th>
-            <th>Purchase Date</th>
-            <th>Sold To</th>
-            <th>Sold To Contact No.</th>
-            <th>Sold Price</th>
-            <th>Sold Date</th>
-            <th>Profit</th>
-            <th>Tools</th>
-          </tr>
-        </thead>
-        <tbody>
-          {devices &&
-            devices.map((item, index) => {
-              return (
-                <tr key={item?._id}>
-                  <td>{(pageNo - 1) * perPage + 1 + index}</td>
-                  <td>{item?.brand}</td>
-                  <td>{item?.model}</td>
-                  <td>{item?.imei}</td>
-                  <td>{item?.ram}</td>
-                  <td>{item?.rom}</td>
-                  <td>{item?.deviceCondition}</td>
-                  <td>{item?.purchasedFrom}</td>
-                  <td>{item?.purchasedFromContactNo}</td>
-                  <td>{item?.purchaseCost}</td>
-                  <td>
-                    {item?.purchaseDate &&
-                      new Date(item?.purchaseDate).toLocaleDateString("en-GB", {
-                        timeZone: "Asia/Kolkata",
-                      })}
-                  </td>
-                  <td>{item?.soldTo}</td>
-                  <td>{item?.soldToContactNo}</td>
-                  <td>{item?.soldPrice}</td>
-                  <td>
-                    {item?.soldDate &&
-                      new Date(item?.soldDate).toLocaleDateString("en-GB", {
-                        timeZone: "Asia/Kolkata",
-                      })}
-                  </td>
-                  <td>{item?.profit}</td>
-                  <td>
-                    <div className="d-flex align-items-center justify-content-center gap-5 px-2">
-                      <button
-                        style={{
-                          border: "0px",
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        <FaPen />
-                      </button>
-                      <button
-                        style={{
-                          border: "0px",
-                          backgroundColor: "transparent",
-                        }}
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-        </tbody>
-      </Table>
-    </div>
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell>#</TableCell>
+              <TableCell>Brand</TableCell>
+              <TableCell>Model</TableCell>
+              <TableCell>Imei</TableCell>
+              <TableCell>RAM</TableCell>
+              <TableCell>ROM (Internal Storage)</TableCell>
+              <TableCell>Device Condition</TableCell>
+              <TableCell>Purchased From</TableCell>
+              <TableCell>Purchased From Contact No.</TableCell>
+              <TableCell>Purchase Cost</TableCell>
+              <TableCell>Purchase Date</TableCell>
+              <TableCell>Sold To</TableCell>
+              <TableCell>Sold To Contact No.</TableCell>
+              <TableCell>Sold Price</TableCell>
+              <TableCell>Sold Date</TableCell>
+              <TableCell>Profit</TableCell>
+              <TableCell>Tools</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {devices &&
+              devices.map((item, index) => {
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={item?._id}>
+                    <TableCell></TableCell>
+
+                    <TableCell>{pageNo * perPage + 1 + index}</TableCell>
+                    <TableCell>{item?.brand}</TableCell>
+                    <TableCell>{item?.model}</TableCell>
+                    <TableCell>{item?.imei}</TableCell>
+                    <TableCell>{item?.ram}</TableCell>
+                    <TableCell>{item?.rom}</TableCell>
+                    <TableCell>{item?.deviceCondition}</TableCell>
+                    <TableCell>{item?.purchasedFrom}</TableCell>
+                    <TableCell>{item?.purchasedFromContactNo}</TableCell>
+                    <TableCell>{item?.purchaseCost}</TableCell>
+                    <TableCell>
+                      {item?.purchaseDate &&
+                        new Date(item?.purchaseDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            timeZone: "Asia/Kolkata",
+                          }
+                        )}
+                    </TableCell>
+                    <TableCell>{item?.soldTo}</TableCell>
+                    <TableCell>{item?.soldToContactNo}</TableCell>
+                    <TableCell>{item?.soldPrice}</TableCell>
+                    <TableCell>
+                      {item?.soldDate &&
+                        new Date(item?.soldDate).toLocaleDateString("en-GB", {
+                          timeZone: "Asia/Kolkata",
+                        })}
+                    </TableCell>
+                    <TableCell>{item?.profit}</TableCell>
+                    <TableCell>
+                      <div className="d-flex align-items-center justify-content-center gap-5 px-2">
+                        <button
+                          style={{
+                            border: "0px",
+                            backgroundColor: "transparent",
+                          }}
+                        >
+                          <FaPen />
+                        </button>
+                        <button
+                          style={{
+                            border: "0px",
+                            backgroundColor: "transparent",
+                          }}
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={count}
+        rowsPerPage={perPage}
+        page={pageNo}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 };
 
