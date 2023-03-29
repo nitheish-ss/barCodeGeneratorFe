@@ -15,9 +15,9 @@ export const user_login_schema = yup.object({
 });
 
 export const device_schema = yup.object().shape({
-  brand: yup.string().required("Brand is required"),
-  model: yup.string().required("Model is required"),
-  imei: yup.string().required("IMEI is required"),
+  brand: yup.string().trim().required("Brand is required"),
+  model: yup.string().trim().required("Model is required"),
+  imei: yup.string().trim().required("IMEI is required"),
   ram: yup
     .number()
     .integer("RAM must be an integer")

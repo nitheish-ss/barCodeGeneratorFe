@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -9,7 +10,7 @@ axios.interceptors.response.use(null, (error) => {
     error.response.status < 500;
   if (!expectedError) {
     console.log("Logging the error", error);
-    alert(error.message);
+    toast.error(error.message);
   }
   return Promise.reject(error);
 });

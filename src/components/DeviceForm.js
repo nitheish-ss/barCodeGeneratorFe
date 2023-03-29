@@ -2,11 +2,28 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import React from "react";
 import { device_initialValues } from "../contsants/Variables";
 import { device_schema } from "../contsants/Schemas";
+import { addNewDevice } from "../services/deviceService";
+import { toast } from "react-toastify";
 
 const DeviceForm = () => {
-  const handleSubmit = (values, { setSubmitting }) => {
-    Object.keys(values).forEach(k => values[k] = values[k] === '' ? null : values[k].trim())
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    Object.keys(values).forEach(
+      (k) =>
+        (values[k] =
+          values[k] === ""
+            ? null
+            : typeof values[k] === "string"
+            ? values[k].trim()
+            : values[k])
+    );
     console.log(values);
+    const result = await addNewDevice(values);
+    if (result.success) {
+      toast.success(result.message);
+      resetForm();
+    } else {
+      toast.error(result.message);
+    }
     setSubmitting(false);
   };
   const numberInputOnWheelPreventChange = (e) => {
