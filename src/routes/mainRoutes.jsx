@@ -7,6 +7,7 @@ import NotFound from "../Pages/404";
 import LandingPage from "../Pages/LandingPage";
 import AddDevice from "../Pages/AddDevice";
 import ProtectedRoutes from "./../components/common/routes/protectedRoute";
+import BulkUpload from "../Pages/BulkUpload";
 
 const MainRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const MainRoutes = () => {
         <Route element={<ProtectedRoutes />}>
           <Route path="/home" element={<LandingPage />} />
           <Route path="/device" element={<AddDevice />} />
+          <Route path="/bulkUpload" element={<BulkUpload />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
