@@ -4,12 +4,21 @@ import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-
+import { styled } from "@mui/material/styles";
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#6c757d",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 const DeviceTable = () => {
   const [devices, setDevices] = useState(null);
   const [pageNo, setPageNo] = useState(0);
@@ -40,24 +49,23 @@ const DeviceTable = () => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell></TableCell>
-              <TableCell>#</TableCell>
-              <TableCell>Brand</TableCell>
-              <TableCell>Model</TableCell>
-              <TableCell>Imei</TableCell>
-              <TableCell>RAM</TableCell>
-              <TableCell>ROM (Internal Storage)</TableCell>
-              <TableCell>Device Condition</TableCell>
-              <TableCell>Purchased From</TableCell>
-              <TableCell>Purchased From Contact No.</TableCell>
-              <TableCell>Purchase Cost</TableCell>
-              <TableCell>Purchase Date</TableCell>
-              <TableCell>Sold To</TableCell>
-              <TableCell>Sold To Contact No.</TableCell>
-              <TableCell>Sold Price</TableCell>
-              <TableCell>Sold Date</TableCell>
-              <TableCell>Profit</TableCell>
-              <TableCell>Tools</TableCell>
+              <StyledTableCell>#</StyledTableCell>
+              <StyledTableCell>Brand</StyledTableCell>
+              <StyledTableCell>Model</StyledTableCell>
+              <StyledTableCell>Imei</StyledTableCell>
+              <StyledTableCell>RAM</StyledTableCell>
+              <StyledTableCell>ROM (Internal Storage)</StyledTableCell>
+              <StyledTableCell>Device Condition</StyledTableCell>
+              <StyledTableCell>Purchased From</StyledTableCell>
+              <StyledTableCell>Purchased From Contact No.</StyledTableCell>
+              <StyledTableCell>Purchase Cost</StyledTableCell>
+              <StyledTableCell>Purchase Date</StyledTableCell>
+              <StyledTableCell>Sold To</StyledTableCell>
+              <StyledTableCell>Sold To Contact No.</StyledTableCell>
+              <StyledTableCell>Sold Price</StyledTableCell>
+              <StyledTableCell>Sold Date</StyledTableCell>
+              <StyledTableCell>Profit</StyledTableCell>
+              <StyledTableCell>Tools</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -65,8 +73,6 @@ const DeviceTable = () => {
               devices.map((item, index) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={item?._id}>
-                    <TableCell></TableCell>
-
                     <TableCell>{pageNo * perPage + 1 + index}</TableCell>
                     <TableCell>{item?.brand}</TableCell>
                     <TableCell>{item?.model}</TableCell>
