@@ -1,5 +1,4 @@
 import * as yup from "yup";
-const MAX_IMAGES = 10;
 export const user_login_schema = yup.object({
   email: yup
     .string()

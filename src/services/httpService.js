@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
+import { logout } from "./auth";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(null, (error) => {
@@ -9,8 +9,10 @@ axios.interceptors.response.use(null, (error) => {
     error.response.status >= 400 &&
     error.response.status < 500;
   if (!expectedError) {
-    console.log("Logging the error", error);
-    toast.error(error.message);
+    toast.error("An unexpected error occurred");
+  }
+  if (error.response.status === 401) {
+    logout();
   }
   return Promise.reject(error);
 });
@@ -24,5 +26,6 @@ export default {
   post: axios.post,
   put: axios.put,
   delete: axios.delete,
+  patch: axios.patch,
   setJwt,
 };
