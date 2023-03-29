@@ -28,6 +28,7 @@ function CustomNavbar() {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
+                <Nav.Link href="/home">Home</Nav.Link>
                   <Nav.Link href="/device">Add Device</Nav.Link>
                   <Nav.Link href="">Link</Nav.Link>
                   <button className="btn btn-secondary" onClick={logout}>

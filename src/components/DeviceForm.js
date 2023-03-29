@@ -81,8 +81,9 @@ const DeviceForm = () => {
                 <label for="imei">IMEI</label>
                 <Field
                   className="form-control form-control-lg"
-                  type="text"
+                  type="number"
                   name="imei"
+                  onWheel={numberInputOnWheelPreventChange}
                 />
                 <ErrorMessage
                   component="div"
