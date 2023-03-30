@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
+import { toast } from "react-toastify";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#6c757d",
@@ -28,9 +29,14 @@ const DeviceTable = () => {
     getDevicesData();
   }, [pageNo, perPage]);
   const getDevicesData = async () => {
-    const result = await getDevices(pageNo, perPage);
-    setCount(result?.count);
-    setDevices(result?.data);
+    try {
+      const result = await getDevices(pageNo, perPage);
+      setCount(result?.count);
+      setDevices(result?.data);
+    } catch (error) {
+        console.log(error)
+        toast.error("error occured while fetching devices")
+    }
   };
 
   const handleChangePage = (event, newPage) => {

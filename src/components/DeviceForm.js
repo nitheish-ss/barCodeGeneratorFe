@@ -17,14 +17,16 @@ const DeviceForm = () => {
             : values[k])
     );
     console.log(values);
-    const result = await addNewDevice(values);
-    if (result.success) {
-      toast.success(result.message);
+    try {
+      await addNewDevice(values);
+      toast.success("Device Added Succcessfully");
       resetForm();
-    } else {
-      toast.error(result.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitting(false);
   };
   const numberInputOnWheelPreventChange = (e) => {
     // Prevent the input value change
