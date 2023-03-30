@@ -112,7 +112,7 @@ const DeviceForm = () => {
 
               <div className="form-group mt-3">
                 <label for="rom">ROM (Internal Storage)</label>
-                <div className="input-group d-flex align-items-center">
+                <div className="input-group d-flex align-items-center gap-2">
                   <Field
                     className="form-control form-control-lg"
                     name="rom"
