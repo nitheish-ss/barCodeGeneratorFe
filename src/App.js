@@ -16,8 +16,8 @@ const App = () => {
   return (
     <>
       <UserContext.Provider value={user}>
+        <CustomNavbar />
         <div className="container-fluid">
-          <CustomNavbar />
           <MainRoutes />
         </div>
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />

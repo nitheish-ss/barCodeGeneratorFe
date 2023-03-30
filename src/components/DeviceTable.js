@@ -45,7 +45,7 @@ const DeviceTable = () => {
   console.log(devices);
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ maxHeight: "81vh" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -54,14 +54,14 @@ const DeviceTable = () => {
               <StyledTableCell>Model</StyledTableCell>
               <StyledTableCell>Imei</StyledTableCell>
               <StyledTableCell>RAM</StyledTableCell>
-              <StyledTableCell>ROM (Internal Storage)</StyledTableCell>
+              <StyledTableCell>ROM</StyledTableCell>
               <StyledTableCell>Device Condition</StyledTableCell>
               <StyledTableCell>Purchased From</StyledTableCell>
-              <StyledTableCell>Purchased From Contact No.</StyledTableCell>
+              <StyledTableCell>Purchased Contact</StyledTableCell>
               <StyledTableCell>Purchase Cost</StyledTableCell>
               <StyledTableCell>Purchase Date</StyledTableCell>
               <StyledTableCell>Sold To</StyledTableCell>
-              <StyledTableCell>Sold To Contact No.</StyledTableCell>
+              <StyledTableCell>Sold Contact</StyledTableCell>
               <StyledTableCell>Sold Price</StyledTableCell>
               <StyledTableCell>Sold Date</StyledTableCell>
               <StyledTableCell>Profit</StyledTableCell>
@@ -79,7 +79,11 @@ const DeviceTable = () => {
                     <TableCell>{item?.imei}</TableCell>
                     <TableCell>{item?.ram}</TableCell>
                     <TableCell>{item?.rom}</TableCell>
-                    <TableCell>{item?.deviceCondition}</TableCell>
+                    <TableCell>
+                      {item?.deviceCondition
+                        ? item?.deviceCondition.slice(0, 20)
+                        : ""}
+                    </TableCell>
                     <TableCell>{item?.purchasedFrom}</TableCell>
                     <TableCell>{item?.purchasedFromContactNo}</TableCell>
                     <TableCell>{item?.purchaseCost}</TableCell>

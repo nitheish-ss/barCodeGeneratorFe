@@ -55,6 +55,7 @@ const DeviceForm = () => {
                   className="form-control form-control-lg"
                   type="text"
                   name="brand"
+                  maxLength={20}
                 />
                 <ErrorMessage
                   component="div"
@@ -69,6 +70,7 @@ const DeviceForm = () => {
                   className="form-control form-control-lg"
                   type="text"
                   name="model"
+                  maxLength={20}
                 />
                 <ErrorMessage
                   component="div"
@@ -109,13 +111,26 @@ const DeviceForm = () => {
 
               <div className="form-group mt-3">
                 <label for="rom">ROM (Internal Storage)</label>
-                <Field
-                  className="form-control form-control-lg"
-                  name="rom"
-                  type="number"
-                  onWheel={numberInputOnWheelPreventChange}
-                />
-
+                <div className="input-group d-flex align-items-center">
+                  <Field
+                    className="form-control form-control-lg"
+                    name="rom"
+                    type="number"
+                    onWheel={numberInputOnWheelPreventChange}
+                    maxLength={3}
+                  />
+                  <div className="input-group-append">
+                    <Field
+                      className="form-control form-control-lg"
+                      name="romUnit"
+                      as="select"
+                      defaultValue="GB"
+                    >
+                      <option value="GB">GB</option>
+                      <option value="TB">TB</option>
+                    </Field>
+                  </div>
+                </div>
                 <ErrorMessage
                   component="div"
                   style={{ color: "red" }}
@@ -146,6 +161,7 @@ const DeviceForm = () => {
                   className="form-control form-control-lg"
                   type="text"
                   name="purchasedFrom"
+                  maxLength={50}
                 />
                 <ErrorMessage
                   component="div"
@@ -161,8 +177,7 @@ const DeviceForm = () => {
                 <Field
                   className="form-control form-control-lg"
                   name="purchasedFromContactNo"
-                  type="number"
-                  onWheel={numberInputOnWheelPreventChange}
+                  type="string"
                 />
                 <ErrorMessage
                   component="div"
@@ -205,6 +220,7 @@ const DeviceForm = () => {
                   className="form-control form-control-lg"
                   type="text"
                   name="soldTo"
+                  maxLength={50}
                 />
                 <ErrorMessage
                   component="div"
@@ -235,6 +251,7 @@ const DeviceForm = () => {
                   name="soldPrice"
                   type="number"
                   onWheel={numberInputOnWheelPreventChange}
+                  maxLength={10}
                 />
                 <ErrorMessage
                   component="div"
@@ -263,6 +280,7 @@ const DeviceForm = () => {
                   className="form-control form-control-lg"
                   name="profit"
                   type="number"
+                  maxLength={10}
                   onWheel={numberInputOnWheelPreventChange}
                 />
                 <ErrorMessage

@@ -19,4 +19,5 @@ export const device_initialValues = {
   soldPrice: "",
   soldDate: "",
   profit: "",
+  romUnit: "GB",
 };

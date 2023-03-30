@@ -12,7 +12,7 @@ function CustomNavbar() {
   return (
     <>
       {user && (
-        <Navbar key={"sm"} bg="light" expand={"sm"} className="mb-3 navbar  sticky-top">
+        <Navbar key={"sm"} bg="light" expand={"sm"} className="mb-3 navbar  mh-10vh sticky-top">
           <Container fluid>
             <Navbar.Brand href="#">Barcode-Generator</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"sm"}`} />
