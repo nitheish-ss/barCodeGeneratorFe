@@ -131,6 +131,7 @@ const DeviceForm = () => {
                   component="textarea"
                   rows="4"
                   name="deviceCondition"
+                  maxLength={500}
                 />
                 <ErrorMessage
                   component="div"
