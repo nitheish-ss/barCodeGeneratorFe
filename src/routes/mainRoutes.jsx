@@ -13,9 +13,9 @@ const MainRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/signIn" element={<SignIn />} />
         <Route element={<ProtectedRoutes />}>
-          <Route path="/home" element={<LandingPage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/device" element={<AddDevice />} />
           <Route path="/bulkUpload" element={<BulkUpload />} />
         </Route>
