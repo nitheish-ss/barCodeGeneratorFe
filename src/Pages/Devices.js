@@ -1,6 +1,6 @@
 import React from "react";
 import DeviceTable from "../components/DeviceTable";
-const LandingPage = () => {
+const Devices = () => {
   return <DeviceTable />;
 };
-export default LandingPage;
+export default Devices;

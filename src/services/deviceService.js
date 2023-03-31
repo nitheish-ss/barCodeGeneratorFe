@@ -10,3 +10,8 @@ export async function getDevices(pageNo, perPage){
   let res = await http.get(`${apiEndpoint}/?pageNo=${pageNo}&perPage=${perPage}`);
   return res.data
 }
+
+export async function getDeviceById(id){
+  let res = await http.get(`${apiEndpoint}/${id}`);
+  return res.data
+}

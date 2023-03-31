@@ -20,7 +20,7 @@ const SignIn = () => {
     try {
       let { status, data } = await login(body);
       if (status === 200) {
-        window.location = "/";
+        window.location = "/devices";
         toast.success("User Verified Successfully");
       } else {
         toast.error("Authentication failed");
@@ -30,7 +30,7 @@ const SignIn = () => {
     }
   };
 
-  if (getCurrentUser()) return <Navigate to="/" />;
+  if (getCurrentUser()) return <Navigate to="/devices" />;
 
   return (
     <div className="container-fluid">

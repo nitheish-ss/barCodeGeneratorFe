@@ -11,6 +11,9 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+import { numberToRupee } from "../utils/numberToRupee";
+import { stringToDate } from "../utils/stringToDate";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#6c757d",
@@ -25,6 +28,7 @@ const DeviceTable = () => {
   const [pageNo, setPageNo] = useState(0);
   const [perPage, setPerPage] = useState(10);
   const [count, setCount] = useState(0);
+  const navigate = useNavigate();
   useEffect(() => {
     getDevicesData();
   }, [pageNo, perPage]);
@@ -34,8 +38,8 @@ const DeviceTable = () => {
       setCount(result?.count);
       setDevices(result?.data);
     } catch (error) {
-        console.log(error)
-        toast.error("error occured while fetching devices")
+      console.log(error);
+      toast.error("error occured while fetching devices");
     }
   };
 
@@ -78,13 +82,25 @@ const DeviceTable = () => {
             {devices &&
               devices.map((item, index) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={item?._id}>
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={item?._id}
+                    onClick={() => {
+                      navigate(`/devices/viewDevice/${item?._id}`);
+                    }}
+                  >
                     <TableCell>{pageNo * perPage + 1 + index}</TableCell>
                     <TableCell>{item?.brand}</TableCell>
                     <TableCell>{item?.model}</TableCell>
                     <TableCell>{item?.imei}</TableCell>
-                    <TableCell>{item?.ram}</TableCell>
-                    <TableCell>{item?.rom}</TableCell>
+                    <TableCell>
+                      {item?.ram} {item?.ram ? "GB" : ""}
+                    </TableCell>
+                    <TableCell>
+                      {item?.rom} {item?.rom ? item?.romUnit : ""}
+                    </TableCell>
                     <TableCell>
                       {item?.deviceCondition
                         ? item?.deviceCondition.slice(0, 20)
@@ -92,26 +108,13 @@ const DeviceTable = () => {
                     </TableCell>
                     <TableCell>{item?.purchasedFrom}</TableCell>
                     <TableCell>{item?.purchasedFromContactNo}</TableCell>
-                    <TableCell>{item?.purchaseCost}</TableCell>
-                    <TableCell>
-                      {item?.purchaseDate &&
-                        new Date(item?.purchaseDate).toLocaleDateString(
-                          "en-GB",
-                          {
-                            timeZone: "Asia/Kolkata",
-                          }
-                        )}
-                    </TableCell>
+                    <TableCell>{numberToRupee(item?.purchaseCost)}</TableCell>
+                    <TableCell>{stringToDate(item?.purchaseDate)}</TableCell>
                     <TableCell>{item?.soldTo}</TableCell>
                     <TableCell>{item?.soldToContactNo}</TableCell>
-                    <TableCell>{item?.soldPrice}</TableCell>
-                    <TableCell>
-                      {item?.soldDate &&
-                        new Date(item?.soldDate).toLocaleDateString("en-GB", {
-                          timeZone: "Asia/Kolkata",
-                        })}
-                    </TableCell>
-                    <TableCell>{item?.profit}</TableCell>
+                    <TableCell>{numberToRupee(item?.soldPrice)}</TableCell>
+                    <TableCell>{stringToDate(item?.soldDate)}</TableCell>
+                    <TableCell>{numberToRupee(item?.profit)}</TableCell>
                     <TableCell>
                       <div className="d-flex align-items-center justify-content-center gap-5 px-2">
                         <button

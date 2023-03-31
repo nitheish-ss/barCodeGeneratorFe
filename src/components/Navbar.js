@@ -8,11 +8,16 @@ import { UserContext } from "../contexts/userContext";
 
 function CustomNavbar() {
   const user = useContext(UserContext);
-  console.log(user)
+  console.log(user);
   return (
     <>
       {user && (
-        <Navbar key={"sm"} bg="light" expand={"sm"} className="mb-3 navbar  mh-10vh sticky-top">
+        <Navbar
+          key={"sm"}
+          bg="light"
+          expand={"sm"}
+          className="mb-3 navbar  mh-10vh sticky-top"
+        >
           <Container fluid>
             <Navbar.Brand href="#">Barcode-Generator</Navbar.Brand>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${"sm"}`} />
@@ -28,9 +33,9 @@ function CustomNavbar() {
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="/">Home</Nav.Link>
-                  <Nav.Link href="/bulkUpload">BulkUpload</Nav.Link>
-                  <Nav.Link href="/device">Add Device</Nav.Link>
+                  <Nav.Link href="/devices">Home</Nav.Link>
+                  <Nav.Link href="/devices/bulkUpload">BulkUpload</Nav.Link>
+                  <Nav.Link href="/devices/addDevice">Add Device</Nav.Link>
                   <Nav.Link href="">Link</Nav.Link>
                   <button className="btn btn-secondary" onClick={logout}>
                     Logout
