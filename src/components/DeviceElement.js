@@ -14,6 +14,9 @@ import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
 import { numberToRupee } from "../utils/numberToRupee";
 import { stringToDate } from "../utils/stringToDate";
+import { FaPen, FaTrash } from "react-icons/fa";
+import ConformationModel from "../models/ConformationModel";
+import { deleteDeviceById } from "../services/deviceService";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -38,6 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const DeviceElement = (props) => {
   const [deviceInfo, setDeviceInfo] = useState(null);
   const [index, setIndex] = useState(0);
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     getDeviceData();
@@ -47,13 +51,24 @@ const DeviceElement = (props) => {
       const result = await getDeviceById(props?.id);
       setDeviceInfo(result);
     } catch (error) {
-      toast.error(error?.response.data.message);
+      toast.error("error occured while fetching device data");
       navigate("/devices");
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      const result = await deleteDeviceById(props?.id);
+      toast.success(result.message);
+      navigate("/devices");
+    } catch (error) {
+      toast.error("error occured while deleting");
     }
   };
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   console.log(deviceInfo);
   return (
@@ -91,203 +106,227 @@ const DeviceElement = (props) => {
         </Carousel.Item>
       </Carousel>
       <div className="container-fluid">
-        <TableContainer component={Paper}>
-          <Table aria-label="customized table">
-            <TableBody>
-              <StyledTableRow>
-                <StyledTableCell align="left" width="50%">
-                  Brand
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.brand}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  alighn="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Model
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.model}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  IMEI
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.imei}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  RAM
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.ram} {deviceInfo?.ram ? "GB" : ""}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  ROM
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.rom} {deviceInfo?.rom ? deviceInfo?.romUnit : ""}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Device Condition
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.deviceCondition}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Purchased From
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.purchasedFrom}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Purchased Contact
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.purchasedFromContactNo}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Purchase Cost
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {numberToRupee(deviceInfo?.purchaseCost)}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Purchase Date
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {stringToDate(deviceInfo?.purchaseDate)}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Sold To
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.soldTo}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Sold Contact
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {deviceInfo?.soldToContactNo}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Sold Price
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {numberToRupee(deviceInfo?.soldPrice)}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Sold Date
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {stringToDate(deviceInfo?.soldDate)}
-                </StyledTableCell>
-              </StyledTableRow>
-              <StyledTableRow>
-                <StyledTableCell
-                  align="left"
-                  width="50%"
-                  component="th"
-                  scope="row"
-                >
-                  Profit
-                </StyledTableCell>
-                <StyledTableCell align="left" width="50%">
-                  {numberToRupee(deviceInfo?.profit)}
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <div className="d-flex align-items-center justify-content-between flex-wrap mt-3 mb-3">
+          <h3>Device Info: </h3>
+          <div className="d-flex flex-wrap gap-3">
+            <button className="btn btn-primary">
+              <FaPen /> Edit
+            </button>
+            <button className="btn btn-secondary" onClick={handleShow}>
+              <FaTrash /> Delete
+            </button>
+          </div>
+        </div>
+        <div>
+          <TableContainer component={Paper}>
+            <Table aria-label="customized table">
+              <TableBody>
+                <StyledTableRow>
+                  <StyledTableCell align="left" width="50%">
+                    Brand
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.brand}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    alighn="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Model
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.model}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    IMEI
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.imei}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    RAM
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.ram} {deviceInfo?.ram ? "GB" : ""}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    ROM
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.rom}{" "}
+                    {deviceInfo?.rom ? deviceInfo?.romUnit : ""}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Device Condition
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.deviceCondition}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Purchased From
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.purchasedFrom}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Purchased Contact
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.purchasedFromContactNo}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Purchase Cost
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {numberToRupee(deviceInfo?.purchaseCost)}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Purchase Date
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {stringToDate(deviceInfo?.purchaseDate)}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Sold To
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.soldTo}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Sold Contact
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {deviceInfo?.soldToContactNo}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Sold Price
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {numberToRupee(deviceInfo?.soldPrice)}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Sold Date
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {stringToDate(deviceInfo?.soldDate)}
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell
+                    align="left"
+                    width="50%"
+                    component="th"
+                    scope="row"
+                  >
+                    Profit
+                  </StyledTableCell>
+                  <StyledTableCell align="left" width="50%">
+                    {numberToRupee(deviceInfo?.profit)}
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
+      <ConformationModel
+        show={show}
+        title={"Confirm Delete"}
+        content={"Are you sure, you want to delete this device?"}
+        positiveButton={"Yes"}
+        handlePositive={handleDelete}
+        negativeButton={" No "}
+        handleNegative={() => {}}
+        handleClose={handleClose}
+      />
     </div>
   );
 };
