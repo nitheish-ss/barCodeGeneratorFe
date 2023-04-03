@@ -27,3 +27,8 @@ export async function updateDeviceById(id, data) {
   let res = await http.put(`${apiEndpoint}/${id}`, data);
   return res.data;
 }
+
+export async function getDeviceByImei(imei) {
+  let res = await http.get(`${apiEndpoint}/imei/${imei}`);
+  return res.data;
+}

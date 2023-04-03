@@ -34,6 +34,7 @@ function CustomNavbar() {
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <Nav.Link href="/devices">Home</Nav.Link>
+                  <Nav.Link href="/devices/scan">Scan</Nav.Link>
                   <Nav.Link href="/devices/bulkUpload">BulkUpload</Nav.Link>
                   <Nav.Link href="/devices/addDevice">Add Device</Nav.Link>
                   <Nav.Link href="">Link</Nav.Link>

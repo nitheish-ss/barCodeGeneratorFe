@@ -11,7 +11,7 @@ import BulkUpload from "../Pages/BulkUpload";
 import Home from "../Pages/Home";
 import ViewDevice from "../Pages/ViewDevice";
 import UpdateDevice from "../Pages/UpdateDevice";
-
+import ScanDevice from "../Pages/ScanDevice"
 const MainRoutes = () => {
   return (
     <Router>
@@ -24,6 +24,7 @@ const MainRoutes = () => {
           <Route path="/devices/bulkUpload" element={<BulkUpload />} />
           <Route path="/devices/viewDevice/:id" element={<ViewDevice />} />
           <Route path="/devices/updateDevice/:id" element={<UpdateDevice />} />
+          <Route path="/devices/scan" element={<ScanDevice />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
