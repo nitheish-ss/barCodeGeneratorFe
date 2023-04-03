@@ -2,10 +2,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import React from "react";
 import { device_initialValues } from "../contsants/Variables";
 import { device_schema } from "../contsants/Schemas";
-import { addNewDevice } from "../services/deviceService";
+import { addNewDevice, updateDeviceById } from "../services/deviceService";
 import { toast } from "react-toastify";
-
-const DeviceForm = () => {
+import { useNavigate } from "react-router-dom";
+const DeviceForm = (props) => {
+  const navigate = useNavigate();
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     Object.keys(values).forEach(
       (k) =>
@@ -18,9 +19,16 @@ const DeviceForm = () => {
     );
     console.log(values);
     try {
-      await addNewDevice(values);
-      toast.success("Device Added Succcessfully");
-      resetForm();
+      if (props?.id) {
+        await updateDeviceById(props.id, values);
+        toast.success("Device Updated Successfully");
+        navigate(`/devices/viewDevice/${props.id}`);
+        window.scrollTo(0, 0);
+      } else {
+        await addNewDevice(values);
+        toast.success("Device Added Succcessfully");
+        resetForm();
+      }
     } catch (error) {
       toast.error(error?.response?.data?.error);
     } finally {
@@ -42,11 +50,23 @@ const DeviceForm = () => {
   };
   return (
     <Formik
-      initialValues={device_initialValues}
+      initialValues={
+        props?.id && props?.deviceData
+          ? {
+              ...props.deviceData,
+              purchaseDate: new Date(props.deviceData.purchaseDate)
+                .toISOString()
+                .substr(0, 10),
+              soldDate: new Date(props.deviceData.soldDate)
+                .toISOString()
+                .substr(0, 10),
+            }
+          : device_initialValues
+      }
       validationSchema={device_schema}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, resetForm }) => (
+      {({ isSubmitting, resetForm, dirty }) => (
         <Form>
           <div className="row" style={{ backgroundColor: "" }}>
             <div className="col-md-8 offset-md-2">
@@ -83,6 +103,7 @@ const DeviceForm = () => {
               <div className="form-group mt-3">
                 <label for="imei">IMEI</label>
                 <Field
+                  disabled = {props?.id}
                   className="form-control form-control-lg"
                   type="number"
                   name="imei"
@@ -295,7 +316,7 @@ const DeviceForm = () => {
                   <button
                     className="btn btn-primary btn-lg"
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !dirty}
                   >
                     Submit
                   </button>

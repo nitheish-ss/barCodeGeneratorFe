@@ -10,6 +10,7 @@ import ProtectedRoutes from "./../components/common/routes/protectedRoute";
 import BulkUpload from "../Pages/BulkUpload";
 import Home from "../Pages/Home";
 import ViewDevice from "../Pages/ViewDevice";
+import UpdateDevice from "../Pages/UpdateDevice";
 
 const MainRoutes = () => {
   return (
@@ -19,9 +20,10 @@ const MainRoutes = () => {
         <Route path="/signIn" element={<SignIn />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/devices" element={<Devices />} />
-          <Route path="/devices/addDevice" element={<AddDevice />} />*-/9
+          <Route path="/devices/addDevice" element={<AddDevice />} />
           <Route path="/devices/bulkUpload" element={<BulkUpload />} />
           <Route path="/devices/viewDevice/:id" element={<ViewDevice />} />
+          <Route path="/devices/updateDevice/:id" element={<UpdateDevice />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

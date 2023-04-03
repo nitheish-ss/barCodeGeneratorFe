@@ -11,7 +11,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { styled } from "@mui/material/styles";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { numberToRupee } from "../utils/numberToRupee";
 import { stringToDate } from "../utils/stringToDate";
 import ConformationModel from "../models/ConformationModel";

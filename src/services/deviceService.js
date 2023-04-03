@@ -22,3 +22,8 @@ export async function deleteDeviceById(id) {
   let res = await http.delete(`${apiEndpoint}/${id}`);
   return res.data;
 }
+
+export async function updateDeviceById(id, data) {
+  let res = await http.put(`${apiEndpoint}/${id}`, data);
+  return res.data;
+}

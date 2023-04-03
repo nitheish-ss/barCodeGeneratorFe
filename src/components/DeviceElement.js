@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getDeviceById } from "../services/deviceService";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Carousel from "react-bootstrap/Carousel";
 import mobile1 from "../assets/mobileCarousel/14profv.jpg";
 import mobile2 from "../assets/mobileCarousel/14prorv.jpg";
@@ -55,6 +55,9 @@ const DeviceElement = (props) => {
       navigate("/devices");
     }
   };
+  const handleEdit = () => {
+    navigate(`/devices/updateDevice/${props?.id}`)
+  }
   const handleDelete = async () => {
     try {
       const result = await deleteDeviceById(props?.id);
@@ -109,7 +112,7 @@ const DeviceElement = (props) => {
         <div className="d-flex align-items-center justify-content-between flex-wrap mt-3 mb-3">
           <h3>Device Info: </h3>
           <div className="d-flex flex-wrap gap-3">
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={handleEdit}>
               <FaPen /> Edit
             </button>
             <button className="btn btn-secondary" onClick={handleShow}>
