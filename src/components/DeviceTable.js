@@ -147,6 +147,9 @@ const DeviceTable = () => {
                               border: "0px",
                               backgroundColor: "transparent",
                             }}
+                            onClick={() => {
+                              navigate(`/devices/updateDevice/${item?._id}`);
+                            }}
                           >
                             <FaPen size={15} />
                           </button>

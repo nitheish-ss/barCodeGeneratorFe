@@ -22,7 +22,7 @@ const DeviceForm = (props) => {
       if (props?.id) {
         await updateDeviceById(props.id, values);
         toast.success("Device Updated Successfully");
-        navigate(`/devices/viewDevice/${props.id}`);
+        navigate(-1);
         window.scrollTo(0, 0);
       } else {
         await addNewDevice(values);
@@ -103,7 +103,7 @@ const DeviceForm = (props) => {
               <div className="form-group mt-3">
                 <label for="imei">IMEI</label>
                 <Field
-                  disabled = {props?.id}
+                  disabled={props?.id}
                   className="form-control form-control-lg"
                   type="number"
                   name="imei"
