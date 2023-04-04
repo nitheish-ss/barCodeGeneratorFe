@@ -21,7 +21,7 @@ const SignIn = () => {
     try {
       let { status, data } = await login(body);
       if (status === 200) {
-        window.location = "/";
+        window.location = "/devices";
         toast.success("User Verified Successfully");
       } else {
         toast.error("Authentication failed");
