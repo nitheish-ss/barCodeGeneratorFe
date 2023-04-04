@@ -32,3 +32,15 @@ export async function getDeviceByImei(imei) {
   let res = await http.get(`${apiEndpoint}/imei/${imei}`);
   return res.data;
 }
+
+export async function searchDevices(pageNo, perPage, search) {
+  console.log(search);
+  let res = await http.get(`${apiEndpoint}/search`, {
+    params: {
+      pageNo: pageNo,
+      perPage: perPage,
+      ...search,
+    },
+  });
+  return res.data;
+}

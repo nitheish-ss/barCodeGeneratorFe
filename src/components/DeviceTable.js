@@ -1,4 +1,4 @@
-import { getDevices, deleteDeviceById } from "../services/deviceService";
+import { searchDevices, deleteDeviceById } from "../services/deviceService";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import React, { useEffect, useState, useRef } from "react";
 import Paper from "@mui/material/Paper";
@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { numberToRupee } from "../utils/numberToRupee";
 import { stringToDate } from "../utils/stringToDate";
 import ConformationModel from "../models/ConformationModel";
+import DeviceSearch from "./DeviceSearch";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#6c757d",
@@ -30,14 +31,15 @@ const DeviceTable = () => {
   const [perPage, setPerPage] = useState(10);
   const [count, setCount] = useState(0);
   const [show, setShow] = useState(false);
+  const [search, setSearch] = useState({});
   const navigate = useNavigate();
   const clicked = useRef(null);
   useEffect(() => {
     getDevicesData();
-  }, [pageNo, perPage]);
+  }, [pageNo, perPage, search]);
   const getDevicesData = async () => {
     try {
-      const result = await getDevices(pageNo, perPage);
+      const result = await searchDevices(pageNo, perPage, search);
       setCount(result?.count);
       setDevices(result?.data);
     } catch (error) {
@@ -71,8 +73,9 @@ const DeviceTable = () => {
   console.log(devices);
   return (
     <div>
+      <DeviceSearch setSearch={setSearch} />
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: "81vh" }}>
+        <TableContainer sx={{ maxHeight: "73vh" }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

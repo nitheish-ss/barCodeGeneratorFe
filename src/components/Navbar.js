@@ -16,7 +16,7 @@ function CustomNavbar() {
           key={"sm"}
           bg="light"
           expand={"sm"}
-          className="mb-3 navbar  mh-10vh sticky-top"
+          className="navbar  mh-10vh sticky-top"
         >
           <Container fluid>
             <Navbar.Brand href="#">Barcode-Generator</Navbar.Brand>
