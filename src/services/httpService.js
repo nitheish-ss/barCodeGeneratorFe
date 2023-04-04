@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { logout } from "./auth";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = process.env.REACT_APP_API_URL + "/api/v1";
 console.log(axios.defaults.baseURL)
 axios.interceptors.response.use(null, (error) => {
   const expectedError =
