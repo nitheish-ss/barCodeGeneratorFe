@@ -6,10 +6,11 @@ import { user_login_initial_values } from "../contsants/Variables";
 import { user_login_schema } from "../contsants/Schemas";
 import { login } from "../services/auth";
 import { getCurrentUser } from "../services/user";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const SignIn = () => {
+  const navigate = useNavigate()
   const handleFormSubmit = async (e, values) => {
     e.preventDefault();
     let body = {
@@ -20,7 +21,7 @@ const SignIn = () => {
     try {
       let { status, data } = await login(body);
       if (status === 200) {
-        window.location = "/devices";
+        window.location = "/";
         toast.success("User Verified Successfully");
       } else {
         toast.error("Authentication failed");
