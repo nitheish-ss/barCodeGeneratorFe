@@ -21,7 +21,7 @@ function Scanner() {
         navigate(`/devices/viewDevice/${result?._id}`);
       }
     } catch {
-      toast.error("error");
+      toast.error("Device Not Found");
     }
   };
   return (
