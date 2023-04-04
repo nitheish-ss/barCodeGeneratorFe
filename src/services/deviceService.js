@@ -44,3 +44,7 @@ export async function searchDevices(pageNo, perPage, search) {
   });
   return res.data;
 }
+export async function uploadBulkDeviceData(data) {
+  let res = await http.post(`${apiEndpoint}/bulkUpload`,data);
+  return res.data;
+}
