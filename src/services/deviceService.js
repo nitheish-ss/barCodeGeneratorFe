@@ -32,3 +32,7 @@ export async function getDeviceByImei(imei) {
   let res = await http.get(`${apiEndpoint}/imei/${imei}`);
   return res.data;
 }
+export async function uploadBulkDeviceData(data) {
+  let res = await http.post(`${apiEndpoint}/bulkUpload`,data);
+  return res.data;
+}
