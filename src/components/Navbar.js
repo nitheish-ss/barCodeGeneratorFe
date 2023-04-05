@@ -37,7 +37,7 @@ function CustomNavbar() {
                   <Nav.Link href="/devices/scan">Scan</Nav.Link>
                   <Nav.Link href="/devices/bulkUpload">BulkUpload</Nav.Link>
                   <Nav.Link href="/devices/addDevice">Add Device</Nav.Link>
-                  <Nav.Link href="">Link</Nav.Link>
+                  <Nav.Link href="/devices/generateBarcode">Generate Barcode</Nav.Link>
                   <button className="btn btn-secondary" onClick={logout}>
                     Logout
                   </button>

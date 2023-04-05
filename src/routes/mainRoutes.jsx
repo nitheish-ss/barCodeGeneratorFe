@@ -12,6 +12,7 @@ import Home from "../Pages/Home";
 import ViewDevice from "../Pages/ViewDevice";
 import UpdateDevice from "../Pages/UpdateDevice";
 import ScanDevice from "../Pages/ScanDevice"
+import GenerateBarcode from "../Pages/GenerateBarcode"
 const MainRoutes = () => {
   return (
     <Router>
@@ -25,6 +26,7 @@ const MainRoutes = () => {
           <Route path="/devices/viewDevice/:id" element={<ViewDevice />} />
           <Route path="/devices/updateDevice/:id" element={<UpdateDevice />} />
           <Route path="/devices/scan" element={<ScanDevice />} />
+          <Route path="/devices/generateBarcode" element={<GenerateBarcode />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
