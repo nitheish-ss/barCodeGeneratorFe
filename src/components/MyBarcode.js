@@ -50,7 +50,10 @@ function MyBarcode() {
             type="number"
             placeholder="Enter Valid IMEI"
             value={imei}
-            onChange={(e) => setImei(e.target.value)}
+            onChange={(e) => {
+              if (e.target.value.toString().length > 15) return;
+              setImei(e.target.value);
+            }}
           />
           <button
             className={`btn ${
