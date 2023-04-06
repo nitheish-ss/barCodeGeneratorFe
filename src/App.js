@@ -4,6 +4,7 @@ import MainRoutes from "./routes/mainRoutes";
 import { getCurrentUser, getMe } from "./services/user";
 import CustomNavbar from "./components/Navbar";
 import { toast, ToastContainer } from "react-toastify";
+import "./App.css";
 
 const App = () => {
   const [user, setUser] = useState(null);
