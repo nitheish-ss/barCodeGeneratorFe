@@ -2539,15 +2539,6 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^16.9.35":
-  version "16.14.38"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.38.tgz#b814d157ca8906603593d5106f6d733af9b79df4"
-  integrity sha512-PbEjuhwkdH6IB5Sak6BFAqpVMHY/wJxa0EG3bKkr0vWA2hSDIq3iEMhHyqjXrDFMqRzkiQkdyNXOnoELrh/9aQ==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
 "@types/resolve@1.17.1":
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"
@@ -2862,10 +2853,10 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
-"@zxing/library@^0.17.0":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.17.1.tgz#4c82bf401391c2b79bfbab0a6b1143da6d8feb1a"
-  integrity sha512-RuiBZuteGaFXCle/b0X+g3peN8UpDc3pGe/J7hZBzKWaMZLbjensR7ja3vy47xWhXU4e8MICGqegPMxc2V2sow==
+"@zxing/library@^0.19.2":
+  version "0.19.2"
+  resolved "https://registry.yarnpkg.com/@zxing/library/-/library-0.19.2.tgz#d5c35f3741121952d73231f986becfdcb5e24de1"
+  integrity sha512-0aCQIbGXsDHcBuRYuZRZfJeLRYiPfdLxIlh5bY7k+k2bkxFwzla+75VyFi1rnjU5hqaZogdSH+Dw013YDsQOjg==
   dependencies:
     ts-custom-error "^3.0.0"
   optionalDependencies:
@@ -9273,15 +9264,6 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-qr-barcode-scanner@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-qr-barcode-scanner/-/react-qr-barcode-scanner-1.0.6.tgz#1df7ac3f3cb839ad673e8b619e0e93b4bdddc4e3"
-  integrity sha512-DdalO4oqHyxWPa4cIjiHeMS19HbIvKq+oo/PAglAsxmfhAUGC8sM1mJnzo0zPQM1yw9ZNpjrtqHz+rs86Mu7Ww==
-  dependencies:
-    "@types/react" "^16.9.35"
-    "@zxing/library" "^0.17.0"
-    react-webcam "^5.0.1"
-
 react-refresh@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
@@ -9381,10 +9363,12 @@ react-transition-group@^4.4.2, react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-webcam@^5.0.1:
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/react-webcam/-/react-webcam-5.2.4.tgz#714b4460ea43ac7ed081824299cd2a580f764478"
-  integrity sha512-Qqj14t68Ke1eoEYjFde+N48HtuIJg0ePIQRpFww9eZt5oBcDpe/l60h+m3VRFJAR5/E3dOhSU5R8EJEcdCq/Eg==
+react-zxing@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-zxing/-/react-zxing-1.1.4.tgz#cef9b1f0ac1365ccbd4999da207166eac9a0d605"
+  integrity sha512-2BRjqpiNnVNIefxgp/GK+Pj6paNodh2nnky/fFqnMRrZmp7ExEl7vcwqJ4BKOjPZKwD3oWG+INX1Rl18rHQjsw==
+  dependencies:
+    "@zxing/library" "^0.19.2"
 
 react@^18.2.0:
   version "18.2.0"
