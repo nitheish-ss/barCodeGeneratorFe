@@ -66,7 +66,7 @@ const DeviceForm = (props) => {
       validationSchema={device_schema}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, resetForm, dirty }) => (
+      {({ values, setFieldValue, isSubmitting, resetForm, dirty }) => (
         <Form>
           <div className="row" style={{ backgroundColor: "" }}>
             <div className="col-md-8 offset-md-2">
@@ -214,6 +214,16 @@ const DeviceForm = (props) => {
                   name="purchaseCost"
                   type="number"
                   onWheel={numberInputOnWheelPreventChange}
+                  onChange={(e) => {
+                    // Update value1 field
+                    setFieldValue("purchaseCost", parseInt(e.target.value || 0));
+                    if (!(values.soldPrice && e.target.value)) return;
+                    // Calculate and update calculatedValue field
+                    setFieldValue(
+                      "profit",
+                      values.soldPrice - parseInt(e.target.value)
+                    );
+                  }}
                 />
                 <ErrorMessage
                   component="div"
@@ -274,6 +284,16 @@ const DeviceForm = (props) => {
                   type="number"
                   onWheel={numberInputOnWheelPreventChange}
                   maxLength={10}
+                  onChange={(e) => {
+                    // Update value1 field
+                    setFieldValue("soldPrice", parseInt(e.target.value || 0));
+                    if (!(values.purchaseCost && e.target.value)) return;
+                    // Calculate and update calculatedValue field
+                    setFieldValue(
+                      "profit",
+                      parseInt(e.target.value) - values.purchaseCost
+                    );
+                  }}
                 />
                 <ErrorMessage
                   component="div"
@@ -302,8 +322,8 @@ const DeviceForm = (props) => {
                   className="form-control form-control-lg"
                   name="profit"
                   type="number"
-                  maxLength={10}
-                  onWheel={numberInputOnWheelPreventChange}
+                  readOnly={true}
+                  disabled={true}
                 />
                 <ErrorMessage
                   component="div"
