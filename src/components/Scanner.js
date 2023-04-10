@@ -1,180 +1,92 @@
-import React, { useEffect, useRef, useState } from "react";
-import Quagga from "quagga";
-import { getDeviceByImei } from "../services/deviceService";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useState, useRef } from "react";
+import Webcam from "react-webcam";
+import Tesseract from "tesseract.js";
 
 const Scanner = (props) => {
-  const firstUpdate = useRef(true);
-  const [isStart, setIsStart] = useState(false);
-  const [barcode, setBarcode] = useState("");
-  const navigate = useNavigate();
+  const [textData, setTextData] = useState("");
+  const [capturedImage, setCapturedImage] = useState(null);
+  const [capturedImeiNumbers, setCapturedImeiNumbers] = useState([]);
+  const [isCameraOpen, setIsCameraOpen] = useState(false); // Added state for camera open/close
+  const webcamRef = useRef(null);
+  const imeiRegex = /\b\d{15}\b/g;
 
-  useEffect(() => {
-    return () => {
-      if (isStart) stopScanner();
+  const captureImage = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setCapturedImage(imageSrc);
+    recognizeText(imageSrc);
+    setIsCameraOpen(false); // Close the camera after capturing image
+  };
+
+  const handleImageUpload = (event) => {
+    const imageFile = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageSrc = e.target.result;
+      setCapturedImage(imageSrc);
+      recognizeText(imageSrc);
     };
-  }, []);
-
-  useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
-    if (isStart) startScanner();
-    else stopScanner();
-  }, [isStart]);
-
-  useEffect(() => {
-    if (barcode === "Not Found") return;
-    if (barcode.length === 15) {
-      getDeviceData(barcode);
-    }
-  }, [barcode]);
-  const getDeviceData = async (data) => {
-    try {
-      const result = await getDeviceByImei(data);
-      if (result?._id) {
-        navigate(`/devices/viewDevice/${result?._id}`);
-      }
-    } catch {
-      toast.error("Device Not Found");
-    }
+    reader.readAsDataURL(imageFile);
+    setIsCameraOpen(false); // Close the camera after uploading image
   };
 
-  const _onDetected = (res) => {
-    // stopScanner();
-    setBarcode(res.codeResult.code);
+  const recognizeText = (imageSrc) => {
+    Tesseract.recognize(imageSrc, "eng")
+      .then(({ data: { text } }) => {
+        setTextData(text);
+        const extractedImeiNumbers = text.match(imeiRegex);
+        if (extractedImeiNumbers) {
+          setCapturedImeiNumbers(extractedImeiNumbers);
+        } else {
+          setCapturedImeiNumbers([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error in OCR: ", error);
+      });
   };
 
-  const startScanner = () => {
-    Quagga.init(
-      {
-        inputStream: {
-          type: "LiveStream",
-          target: document.querySelector("#scanner-container"),
-          constraints: {
-            facingMode: "environment", // or user
-          },
-        },
-        numOfWorkers: navigator.hardwareConcurrency,
-        locate: true,
-        frequency: 1,
-        debug: {
-          drawBoundingBox: true,
-          showFrequency: true,
-          drawScanline: true,
-          showPattern: true,
-        },
-        multiple: false,
-        locator: {
-          halfSample: false,
-          patchSize: "large", // x-small, small, medium, large, x-large
-          debug: {
-            showCanvas: false,
-            showPatches: false,
-            showFoundPatches: false,
-            showSkeleton: false,
-            showLabels: false,
-            showPatchLabels: false,
-            showRemainingPatchLabels: false,
-            boxFromPatches: {
-              showTransformed: false,
-              showTransformedBox: false,
-              showBB: false,
-            },
-          },
-        },
-        decoder: {
-          readers: [
-            "code_128_reader",
-            "ean_reader",
-            "ean_8_reader",
-            "code_39_reader",
-            "code_39_vin_reader",
-            "codabar_reader",
-            "upc_reader",
-            "upc_e_reader",
-            "i2of5_reader",
-            "i2of5_reader",
-            "2of5_reader",
-            "code_93_reader",
-          ],
-        },
-      },
-      (err) => {
-        if (err) {
-          return console.log(err);
-        }
-        Quagga.start();
-      }
-    );
-    Quagga.onDetected(_onDetected);
-    Quagga.onProcessed((result) => {
-      let drawingCtx = Quagga.canvas.ctx.overlay,
-        drawingCanvas = Quagga.canvas.dom.overlay;
-
-      if (result) {
-        if (result.boxes) {
-          drawingCtx.clearRect(
-            0,
-            0,
-            parseInt(drawingCanvas.getAttribute("width")),
-            parseInt(drawingCanvas.getAttribute("height"))
-          );
-          result.boxes
-            .filter((box) => box !== result.box)
-            .forEach((box) => {
-              Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
-                color: "green",
-                lineWidth: 2,
-              });
-            });
-        }
-
-        if (result.box) {
-          Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
-            color: "#00F",
-            lineWidth: 2,
-          });
-        }
-
-        if (result.codeResult && result.codeResult.code) {
-          Quagga.ImageDebug.drawPath(
-            result.line,
-            { x: "x", y: "y" },
-            drawingCtx,
-            { color: "red", lineWidth: 3 }
-          );
-        }
-      }
-    });
-  };
-
-  const stopScanner = () => {
-    Quagga.offProcessed();
-    Quagga.offDetected();
-    Quagga.stop();
+  const toggleCamera = () => {
+    setCapturedImage(null);
+    setIsCameraOpen(!isCameraOpen);
   };
 
   return (
-    <div>
-      <button
-        onClick={() => setIsStart((prevStart) => !prevStart)}
-        style={{ marginBottom: 20 }}
-      >
-        {isStart ? "Stop" : "Start"}
-      </button>
-      {isStart && (
-        <React.Fragment>
-          <div>
-            <div id="scanner-container" />
-            <span>Barcode: {barcode}</span>
-          </div>
-        </React.Fragment>
+    <>
+      <Webcam
+        ref={webcamRef}
+        width={"100%"}
+        videoConstraints={{ facingMode: "environment" }} // Toggle between front and back camera
+        style={{ display: isCameraOpen ? "block" : "none" }} // Hide webcam when not open
+      />
+      {capturedImage && (
+        <img
+          src={capturedImage}
+          alt="Captured Image"
+          width="100%"
+          height="100%"
+        />
       )}
-    </div>
+      {isCameraOpen ? (
+        <button onClick={captureImage}>Capture and Recognize</button>
+      ) : (
+        <button onClick={toggleCamera}>Open Camera</button>
+      )}
+      <div>{textData}</div>
+      <div>
+        <h3>Extracted IMEI Numbers</h3>
+        {capturedImeiNumbers.length > 0 ? (
+          <ul>
+            {capturedImeiNumbers.map((imei, index) => (
+              <li key={index}>{imei}</li>
+            ))}
+          </ul>
+        ) : (
+          <p>No IMEI numbers found.</p>
+        )}
+      </div>
+      <h3>Upload Image</h3>
+      <input type="file" accept="image/*" onChange={handleImageUpload} />
+    </>
   );
 };
 
