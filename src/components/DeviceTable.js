@@ -36,7 +36,7 @@ const DeviceTable = () => {
   const clicked = useRef(null);
   useEffect(() => {
     getDevicesData();
-  }, [pageNo, perPage, search]);
+  }, [pageNo, perPage, search, show]);
   const getDevicesData = async () => {
     try {
       const result = await searchDevices(pageNo, perPage, search);
@@ -52,7 +52,7 @@ const DeviceTable = () => {
     try {
       const result = await deleteDeviceById(clicked.current);
       toast.success(result.message);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       toast.error("error occured while deleting");
     }
