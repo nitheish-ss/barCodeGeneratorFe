@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import Quagga from "quagga";
+import { getDeviceByImei } from "../services/deviceService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Scanner = (props) => {
   const firstUpdate = useRef(true);
   const [isStart, setIsStart] = useState(false);
   const [barcode, setBarcode] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -21,6 +25,23 @@ const Scanner = (props) => {
     if (isStart) startScanner();
     else stopScanner();
   }, [isStart]);
+
+  useEffect(() => {
+    if (barcode === "Not Found") return;
+    if (barcode.length === 15) {
+      getDeviceData(barcode);
+    }
+  }, [barcode]);
+  const getDeviceData = async (data) => {
+    try {
+      const result = await getDeviceByImei(data);
+      if (result?._id) {
+        navigate(`/devices/viewDevice/${result?._id}`);
+      }
+    } catch {
+      toast.error("Device Not Found");
+    }
+  };
 
   const _onDetected = (res) => {
     // stopScanner();
