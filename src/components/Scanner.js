@@ -6,15 +6,17 @@ const Scanner = (props) => {
   const [textData, setTextData] = useState("");
   const [capturedImage, setCapturedImage] = useState(null);
   const [capturedImeiNumbers, setCapturedImeiNumbers] = useState([]);
-  const [isCameraOpen, setIsCameraOpen] = useState(false); // Added state for camera open/close
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isRecognizing, setIsRecognizing] = useState(false); // Added state for loader
   const webcamRef = useRef(null);
   const imeiRegex = /\b\d{15}\b/g;
 
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
+    setIsRecognizing(true); // Show loader while recognizing text
     recognizeText(imageSrc);
-    setIsCameraOpen(false); // Close the camera after capturing image
+    setIsCameraOpen(false);
   };
 
   const handleImageUpload = (event) => {
@@ -23,10 +25,11 @@ const Scanner = (props) => {
     reader.onload = (e) => {
       const imageSrc = e.target.result;
       setCapturedImage(imageSrc);
+      setIsRecognizing(true); // Show loader while recognizing text
       recognizeText(imageSrc);
     };
     reader.readAsDataURL(imageFile);
-    setIsCameraOpen(false); // Close the camera after uploading image
+    setIsCameraOpen(false);
   };
 
   const recognizeText = (imageSrc) => {
@@ -39,9 +42,11 @@ const Scanner = (props) => {
         } else {
           setCapturedImeiNumbers([]);
         }
+        setIsRecognizing(false); // Hide loader after text recognition
       })
       .catch((error) => {
         console.error("Error in OCR: ", error);
+        setIsRecognizing(false); // Hide loader after text recognition
       });
   };
 
@@ -55,22 +60,18 @@ const Scanner = (props) => {
       <Webcam
         ref={webcamRef}
         width={"100%"}
-        videoConstraints={{ facingMode: "environment" }} // Toggle between front and back camera
-        style={{ display: isCameraOpen ? "block" : "none" }} // Hide webcam when not open
+        videoConstraints={{ facingMode: "environment" }}
+        style={{ display: isCameraOpen ? "block" : "none" }}
       />
       {capturedImage && (
-        <img
-          src={capturedImage}
-          alt="Captured Image"
-          width="100%"
-          height="100%"
-        />
+        <img src={capturedImage} alt="Captured Image" width="100%" height="100%" />
       )}
       {isCameraOpen ? (
         <button onClick={captureImage}>Capture and Recognize</button>
       ) : (
         <button onClick={toggleCamera}>Open Camera</button>
       )}
+      {isRecognizing && <div>Loading...</div>} {/* Show loader while recognizing text */}
       <div>{textData}</div>
       <div>
         <h3>Extracted IMEI Numbers</h3>
