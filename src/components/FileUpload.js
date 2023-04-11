@@ -275,11 +275,39 @@ const FileUpload = () => {
         Sold_Date: "dd/mm/yyyy",
       },
     ];
+  
     let workbook = XLSX.utils.book_new();
     let worksheet = XLSX.utils.json_to_sheet(data);
+  
+    // Set custom column widths for each column heading
+    const columnWidths = [
+      // ... column widths ...
+      { wch: 20 }, // Brand
+      { wch: 20 }, // Model
+      { wch: 20 }, // IMEI
+      { wch: 5 }, // RAM
+      { wch: 5 }, // ROM
+      { wch: 15 }, // ROM_GB_or_TB
+      { wch: 40 }, // Device_Condition
+      { wch: 20 }, // Purchased_From
+      { wch: 20 }, // Purchased_From_Contact_No
+      { wch: 15 }, // Purchase_Cost
+      { wch: 15 }, // Purchase_Date
+      { wch: 20 }, // Sold_To
+      { wch: 20 }, // Sold_To_Contact_No
+      { wch: 15 }, // Sold_Price
+      { wch: 15 }, // Sold_Date
+    ];
+  
+    // Set IMEI column format as text
+  
+    // Set custom column widths in the worksheet
+    worksheet['!cols'] = columnWidths;
+  
     XLSX.utils.book_append_sheet(workbook, worksheet, "sheet");
     XLSX.writeFile(workbook, "bulk_upload_template.xlsx");
   };
+  
 
   return (
     <div
