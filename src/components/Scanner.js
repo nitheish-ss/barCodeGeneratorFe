@@ -1,22 +1,40 @@
-import React, { useState, useRef } from "react";
-import Webcam from "react-webcam";
-import Tesseract from "tesseract.js";
+import React, { useState, useRef, useEffect } from "react";
+import { FaCamera } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Tesseract, { createWorker } from "tesseract.js";
+import { getDeviceByImei } from "../services/deviceService";
 
 const Scanner = (props) => {
   const [textData, setTextData] = useState("");
   const [capturedImage, setCapturedImage] = useState(null);
   const [capturedImeiNumbers, setCapturedImeiNumbers] = useState([]);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [isRecognizing, setIsRecognizing] = useState(false); // Added state for loader
+  const [isRecognizing, setIsRecognizing] = useState(false);
+  const navigate = useNavigate(); // Added state for loader
   const webcamRef = useRef(null);
   const imeiRegex = /\b\d{15}\b/g;
 
-  const captureImage = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setCapturedImage(imageSrc);
-    setIsRecognizing(true); // Show loader while recognizing text
-    recognizeText(imageSrc);
-    setIsCameraOpen(false);
+  useEffect(() => {
+    if (!capturedImeiNumbers) return;
+    if (capturedImeiNumbers.length > 0) {
+      getDeviceData(capturedImeiNumbers);
+    }
+  }, [capturedImeiNumbers]);
+  const getDeviceData = async (data) => {
+    try {
+      const result = await getDeviceByImei(data.shift());
+      if (result?._id) {
+        navigate(`/devices/viewDevice/${result?._id}`);
+      }
+    } catch {
+      if (data.length > 0) getDeviceData(data);
+      else {
+        toast.error("Device Not Found");
+      }
+    } finally {
+      return;
+    }
   };
 
   const handleImageUpload = (event) => {
@@ -32,46 +50,55 @@ const Scanner = (props) => {
     setIsCameraOpen(false);
   };
 
-  const recognizeText = (imageSrc) => {
-    Tesseract.recognize(imageSrc, "eng")
-      .then(({ data: { text } }) => {
-        setTextData(text);
-        const extractedImeiNumbers = text.match(imeiRegex);
-        if (extractedImeiNumbers) {
-          setCapturedImeiNumbers(extractedImeiNumbers);
-        } else {
-          setCapturedImeiNumbers([]);
-        }
-        setIsRecognizing(false); // Hide loader after text recognition
-      })
-      .catch((error) => {
-        console.error("Error in OCR: ", error);
-        setIsRecognizing(false); // Hide loader after text recognition
+  const recognizeText = async (imageSrc) => {
+    const worker = await createWorker({
+      logger: (m) => console.log(m),
+    });
+    (async () => {
+      await worker.loadLanguage("eng");
+      await worker.initialize("eng");
+      await worker.setParameters({
+        // tessedit_char_whitelist: "0123456789",
       });
-  };
-
-  const toggleCamera = () => {
-    setCapturedImage(null);
-    setIsCameraOpen(!isCameraOpen);
+      const {
+        data: { text },
+      } = await worker.recognize(imageSrc);
+      setTextData(text);
+      setIsRecognizing(false);
+      await worker.terminate();
+      const extractedImeiNumbers = text.match(imeiRegex);
+      if (extractedImeiNumbers) {
+        setCapturedImeiNumbers(extractedImeiNumbers);
+      } else {
+        setCapturedImeiNumbers([]);
+      }
+      setIsRecognizing(false);
+    })();
   };
 
   return (
     <>
-      <Webcam
-        ref={webcamRef}
-        width={"100%"}
-        videoConstraints={{ facingMode: "environment" }}
-        style={{ display: isCameraOpen ? "block" : "none" }}
-      />
+      <label for="inputTag" style={{ cursor: "pointer" }}>
+        <FaCamera size={100} />
+        <input
+          id="inputTag"
+          style={{ display: "none" }}
+          type="file"
+          accept="image/*"
+          capture={"environment"}
+          onChange={handleImageUpload}
+        />
+      </label>
       {capturedImage && (
-        <img src={capturedImage} alt="Captured Image" width="100%" height="100%" />
+        <img
+          src={capturedImage}
+          alt="Captured Image"
+          width="100%"
+          height="100%"
+        />
       )}
-      {isCameraOpen ? (
-        <button onClick={captureImage}>Capture and Recognize</button>
-      ) : (
-        <button onClick={toggleCamera}>Open Camera</button>
-      )}
-      {isRecognizing && <div>Loading...</div>} {/* Show loader while recognizing text */}
+      {isRecognizing && <div>Loading...</div>}{" "}
+      {/* Show loader while recognizing text */}
       <div>{textData}</div>
       <div>
         <h3>Extracted IMEI Numbers</h3>
@@ -85,8 +112,6 @@ const Scanner = (props) => {
           <p>No IMEI numbers found.</p>
         )}
       </div>
-      <h3>Upload Image</h3>
-      <input type="file" accept="image/*" onChange={handleImageUpload} />
     </>
   );
 };
