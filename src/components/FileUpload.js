@@ -18,7 +18,9 @@ const FileUpload = () => {
           imei: data?.IMEI,
           ...(data?.RAM && { ram: data?.RAM }),
           ...(data?.ROM && { rom: data?.ROM }),
-          ...(data?.ROM_GB_or_TB && { romUnit: data?.ROM_GB_or_TB.toUpperCase() }),
+          ...(data?.ROM_GB_or_TB && {
+            romUnit: data?.ROM_GB_or_TB.toUpperCase(),
+          }),
           ...(data?.Device_Condition && {
             deviceCondition: data?.Device_Condition,
           }),
@@ -27,14 +29,19 @@ const FileUpload = () => {
             purchasedFromContactNo: data?.Purchased_From_Contact_No,
           }),
           ...(data?.Purchase_Cost && { purchaseCost: data?.Purchase_Cost }),
-          ...(data?.Purchase_Date && { purchaseDate: new Date(data?.Purchase_Date) }),
+          ...(data?.Purchase_Date && {
+            purchaseDate: new Date(data?.Purchase_Date),
+          }),
           ...(data?.Sold_To && { soldTo: data?.Sold_To }),
           ...(data?.Sold_To_Contact_No && {
             soldToContactNo: data?.Sold_To_Contact_No,
           }),
           ...(data?.Sold_Price && { soldPrice: data?.Sold_Price }),
           ...(data?.Sold_Date && { soldDate: new Date(data?.Sold_Date) }),
-          ...(data?.Profit && { profit: data?.Profit }),
+          ...(data?.Purchase_Cost &&
+            data?.Sold_Price && {
+              profit: data?.Sold_Price - data?.Purchase_Cost,
+            }),
         };
       });
       try {
@@ -66,7 +73,6 @@ const FileUpload = () => {
                 "Sold_To_Contact_No",
                 "Sold_Price",
                 "Sold_Date",
-                "Profit",
               ].includes(title)
             )
           )
@@ -159,6 +165,15 @@ const FileUpload = () => {
               message: `Row number - ${
                 exampleData.removed && exampleData.index <= i ? i + 3 : i + 2
               } : Sold_Price should be positive`,
+            });
+            break;
+          }
+          if (uploadData[i]?.Purchase_Cost < 0) {
+            setError({
+              is_error: true,
+              message: `Row number - ${
+                exampleData.removed && exampleData.index <= i ? i + 3 : i + 2
+              } : Purchase_Cost should be positive`,
             });
             break;
           }
@@ -258,7 +273,6 @@ const FileUpload = () => {
         Sold_To_Contact_No: 9956471589,
         Sold_Price: 25000,
         Sold_Date: "dd/mm/yyyy",
-        Profit: 5000,
       },
     ];
     let workbook = XLSX.utils.book_new();
@@ -268,26 +282,38 @@ const FileUpload = () => {
   };
 
   return (
-    <>
-      <h2>Bulk Upload</h2>
+    <div
+      className="mt-3
+    "
+    >
+      <h2 className=" mb-3 ">Bulk Upload</h2>
       <label htmlFor="fileSelect">Select File:</label>
-      <div>
-        <input
-          id="fileSelect"
-          type="file"
-          accept=".xlsx, .xls, .csv"
-          onChange={handleFileSelection}
-        />
-      </div>
+
+      <input
+        className="d-block mb-3 mt-1"
+        id="fileSelect"
+        type="file"
+        accept=".xlsx, .xls, .csv"
+        onChange={handleFileSelection}
+      />
+
       {error.is_error && <div className="text-danger">{error.message}</div>}
-      <button
-        onClick={uploadBulkData}
-        disabled={error.is_error ?? devicesList.length == 0}
-      >
-        Upload
-      </button>
-      <button onClick={downloadTemplate}>Download Template</button>
-    </>
+      <div className="row">
+        <div className="col-lg-3 col-md-6 col-sm-12 d-flex justify-content-between">
+          <button
+            className="btn btn-primary"
+            onClick={uploadBulkData}
+            disabled={error.is_error ?? devicesList.length == 0}
+          >
+            Upload
+          </button>
+
+          <button className="btn btn-secondary" onClick={downloadTemplate}>
+            Download Template
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
